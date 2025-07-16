@@ -1,4 +1,4 @@
-name: Azure Static Web Apps CI/CD
+name: Azure Static Web Apps CI/CD (Fixed)
 
 on:
   push:
@@ -14,42 +14,11 @@ jobs:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy Job
-    permissions:
-      id-token: write
-      contents: read
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: true
           lfs: false
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          cache: 'npm'
-          cache-dependency-path: |
-            package-lock.json
-            frontend/package-lock.json
-            backend/package-lock.json
-      
-      - name: Install root dependencies
-        run: npm install
-      
-      - name: Install frontend dependencies
-        run: |
-          cd frontend
-          npm install
-      
-      - name: Install backend dependencies
-        run: |
-          cd backend
-          npm install
-      
-      - name: Build frontend
-        run: |
-          cd frontend
-          npm run build
       
       - name: Build And Deploy
         id: builddeploy
@@ -59,9 +28,9 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
           ###### Repository/Build Configurations ######
-          app_location: "./frontend" # App source code path
-          api_location: "./backend" # Api source code path
-          output_location: "out" # Built app content directory for Next.js
+          app_location: "./frontend"
+          api_location: "./backend"
+          output_location: "out"
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:

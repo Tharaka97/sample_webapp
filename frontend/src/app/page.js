@@ -3,6 +3,11 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
+// Configure axios base URL for different environments
+const api = axios.create({
+  baseURL: process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000',
+})
+
 export default function Home() {
   const [message, setMessage] = useState('')
   const [data, setData] = useState([])
@@ -17,7 +22,7 @@ export default function Home() {
   const fetchHello = async () => {
     try {
       setLoading(true)
-      const response = await axios.get('/api/hello')
+      const response = await api.get('/api/hello')
       setMessage(response.data.message + ' at ' + new Date(response.data.timestamp).toLocaleString())
     } catch (error) {
       setMessage('Error: ' + error.message)
@@ -29,7 +34,7 @@ export default function Home() {
   const fetchData = async () => {
     try {
       setLoading(true)
-      const response = await axios.get('/api/data')
+      const response = await api.get('/api/data')
       setData(response.data)
     } catch (error) {
       console.error('Error fetching data:', error)
@@ -42,7 +47,7 @@ export default function Home() {
     e.preventDefault()
     try {
       setLoading(true)
-      const response = await axios.post('/api/contact', contactForm)
+      const response = await api.post('/api/contact', contactForm)
       setContactResponse(response.data.message)
       setContactForm({ name: '', email: '', message: '' })
     } catch (error) {
