@@ -1,0 +1,29 @@
+name: Debug Azure Deployment
+
+on:
+  workflow_dispatch:  # Manual trigger only
+
+jobs:
+  debug_job:
+    runs-on: ubuntu-latest
+    name: Debug Job
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check Secrets
+        run: |
+          echo "Checking which secrets are available..."
+          echo "AZURE_STATIC_WEB_APPS_API_TOKEN exists: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN != '' }}"
+          echo "OLD_TOKEN exists: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ZEALOUS_SEA_04488D300 != '' }}"
+          
+      - name: List Files
+        run: |
+          echo "Listing workflow files:"
+          ls -la .github/workflows/
+          
+      - name: Check Project Structure
+        run: |
+          echo "Project structure:"
+          ls -la
+          echo "Frontend exists: $(test -d frontend && echo 'Yes' || echo 'No')"
+          echo "Backend exists: $(test -d backend && echo 'Yes' || echo 'No')"
